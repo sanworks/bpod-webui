@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Bpod Rig Dashboard</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='sanworks-icon.png') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="{{ url_for('static', filename='sanworks-icon.png') }}"
+                 alt="Bpod"
+                 class="navbar-icon">
+            <span>Bpod Rig Dashboard</span>
+        </div>
+        {% set current = request.endpoint %}
+        <div class="navbar-nav">
+            <a href="{{ url_for('dashboard') }}" class="nav-btn {% if current == 'dashboard' %}active{% endif %}">Devices</a>
+            <a href="{{ url_for('configure') }}" class="nav-btn {% if current == 'configure' %}active{% endif %}">Configure</a>
+            <a href="{{ url_for('help') }}" class="nav-btn {% if current == 'help' %}active{% endif %}">Help</a>
+        </div>
+    </nav>
+    {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="dashboard" id="dashboard"></div>
+    <script>
+        function renderPorts(ports, type) {
+            const typeClass = type === 'behavior' ? 'behavior-port' : 'module-port';
+            return ports.map((active, i) =>
+                `<div class="port ${typeClass} ${active ? 'active' : ''}" title="${type} port ${i+1}"></div>`
+            ).join('');
+        }
+        function renderDevice(device) {
+            const statusClass = `status-${device.status}`;
+            const operantBadge = device.operant ? `<div class="operant-badge">${device.operant}</div>` : '';
+            return `
+                <div class="device-card ${device.status}">
+                    <div class="device-header">
+                        <div class="device-name">${device.name}</div>
+                        <div class="status-badge ${statusClass}">${device.status}</div>
+                    </div>
+                    <div class="port-section">
+                        <div class="port-label">Behavior (${device.ports.behavior.length})</div>
+                        <div class="port-grid behavior">
+                            ${renderPorts(device.ports.behavior, 'behavior')}
+                        </div>
+                    </div>
+                    <div class="port-section">
+                        <div class="port-label">Module (${device.ports.module.length})</div>
+                        <div class="port-grid module">
+                            ${renderPorts(device.ports.module, 'module')}
+                        </div>
+                    </div>
+                    <div class="device-info">
+                        IP: ${device.ip}<br>
+                        ${device.protocol ? `Protocol: ${device.protocol}<br>` : ''}
+                        ${device.session ? `Session: ${device.session} | Trials: ${device.trials}` : 'Idle'}
+                    </div>
+                    ${operantBadge}
+                </div>
+            `;
+        }
+        const loadDevices = () => fetch('{{ url_for("devices") }}')
+            .then(response => response.ok ? response.json() : Promise.reject(response))
+            .then(devices => document.getElementById('dashboard').innerHTML = devices.map(renderDevice).join(''))
+            .catch(error => document.getElementById('dashboard').innerHTML = '<div class="devices-error">Failed to load devices!</div>');
+        loadDevices();
+        setInterval(loadDevices, 5000);
+    </script>
+{% endblock %}

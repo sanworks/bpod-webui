@@ -1,0 +1,217 @@
+/* General Layout */
+body{
+    background: #1E1E2D;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+}
+
+/* Navbar */
+.navbar {
+    background: #2a2a3e;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #E6E6E6;
+    font-size: 1.25rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.navbar-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+.navbar-nav {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+.nav-btn {
+    background: #3a3a4e;
+    color: #E6E6E6;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+.nav-btn.active,
+.nav-btn:hover {
+    background: #4a4a5e;
+}
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    .nav-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+    }
+}
+@media (max-width: 480px) {
+    .navbar-nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .nav-btn {
+        flex: 1;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* Dashboard */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+/* Device Card */
+.device-card {
+    background: #E6E6E6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 8px solid #222222;
+    position: relative;
+}
+.device-card.online { border-left-color: #28a745; }
+.device-card.offline { border-left-color: #dc3545; }
+.device-card.running { border-left-color: #3484f0; }
+.device-card.crashed { border-left-color: #fd7e14; }
+
+/* Device Header has the Device Name and Status Badge */
+.device-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.device-name { font-weight: 600; font-size: 1.1rem; }
+
+/*  Status Badge: Running / Online / Offline / Crashed */
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.status-online { background: #d4edda; color: #155724; }
+.status-offline { background: #f8d7da; color: #721c24; }
+.status-crashed { background: #ffeaa7; color: #b8860b; }
+.status-running {
+    background: #cce5ff;
+    color: #004085;
+    animation: pulse-animation 3s infinite;
+}
+@keyframes pulse-animation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Operant Badge positioned in lower right */
+.operant-badge {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Ports (Behavior and Module) are two different colors / sizes */
+.port-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+.port {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background: #e9ecef;
+    border: 1px solid #ced4da;
+}
+.port.active { background: #28a745; }
+.port.triggered { background: #ffc107; }
+.port-section {
+    margin: 1rem 0;
+}
+
+.port-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.port-grid.behavior {
+    grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+    max-width: 250px;
+}
+.port-grid.module {
+    grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+    max-width: 250px;
+}
+.behavior-port {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+}
+.module-port {
+    background: #f3e5f5;
+    border: 1px solid #ce93d8;
+    width: 25px;
+    height: 25px;
+}
+.behavior-port.active { background: #4caf50; }
+.module-port.active { background: #9c27b0; }
+
+/* Device Info (IP / Protocol / Session / Trials / etc) */
+.device-info {
+    font-size: 0.85rem;
+    color: #696969;
+    line-height: 1.4;
+    margin-right: 80px; /* Space for operant badge */
+}
+.devices-error{
+    color:red;
+    background: #E6E6E6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-weight:800;
+}
