@@ -17,7 +17,11 @@
         {% set current = request.endpoint %}
         <div class="navbar-nav">
             <div id="spinner" class="spinner d-none"></div>
+            <a href="{{ url_for('dashboard') }}" class="nav-btn {% if current == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{{ url_for('devices_browse') }}" class="nav-btn {% if current == 'devices_browse' %}active{% endif %}">Browse Network</a>
+            <a href="{{ url_for('settings') }}" class="nav-btn {% if current == 'settings' %}active{% endif %}">Settings</a>
             <a href="{{ url_for('help') }}" class="nav-btn {% if current == 'help' %}active{% endif %}">Help</a>
+            <a href="{{ url_for('example') }}" class="nav-btn {% if current == 'example' %}active{% endif %}">EXAMPLE</a>
         </div>
     </nav>
     {% block content %}{% endblock %}

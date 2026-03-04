@@ -1,8 +1,44 @@
+from pathlib import Path
+from typing import Optional
 
-# TODO: *actually* get devices ;-)
+from platformdirs import user_config_dir
 
-def get_devices():
-    return [
+from bpod_core.bpod import discover_remote_bpod
+from bpod_core.misc import SettingsDict
+
+
+def get_settings_path():
+    """ returns our platform-independent settings path """
+    return Path(user_config_dir('bpod-webui'))
+
+
+def get_settings() -> SettingsDict:
+    """ returns our settings as a Bpod SettingsDict object """
+    return SettingsDict(get_settings_path() / "settings.json")
+
+
+def get_network_devices() -> list[dict]:
+    _devices = []
+    for event_type, address, properties in discover_remote_bpod(local=True, remote=True, timeout=5, poll_interval=.5):
+        match event_type:
+            case 'added':
+                _devices.append({
+                    'address': address,
+                    'serial': properties.get('serial', '') or '',
+                    'name': properties.get('name', '') or '',
+                    'description': properties.get('description', '') or '',
+                    'location': properties.get('location', '') or '',
+                    'firmware': properties.get('firmware', '') or '',
+                    'core': properties.get('core', '') or '',
+                })
+    return _devices
+
+
+def get_example_devices(device_id:Optional[str]=None) -> list|dict|None:
+    """ if no `device_id` is passed, returns a list of example bpod device dicts
+    including various types and states of device;
+    if a `device_id` is passed, returns the corresponding device dict or None  """
+    _devices = [
         {
             "id": "bpod-01",
             "name": "Bpod State Machine r2.5",
@@ -88,3 +124,6 @@ def get_devices():
             }
         }
     ]
+    if device_id is None:
+        return _devices
+    return next(iter([device for device in _devices if device['id'] == device_id]), None)

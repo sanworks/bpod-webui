@@ -38,10 +38,17 @@
                 </div>
             `;
         }
-        const loadDevices = () => fetch('{{ url_for("devices") }}')
+        function loadDevices(){
+            document.getElementById('spinner').classList.remove('d-none');
+            fetch('{{ url_for(json_route) }}')
             .then(response => response.ok ? response.json() : Promise.reject(response))
-            .then(devices => document.getElementById('dashboard').innerHTML = devices.map(renderDevice).join(''))
-            .catch(error => document.getElementById('dashboard').innerHTML = '<div class="devices-error">Failed to load devices!</div>');
+            .then(function(devices){
+                document.getElementById('dashboard').innerHTML = devices.map(renderDevice).join('');
+                document.getElementById('spinner').classList.add('d-none');
+            })
+            .catch(error => document.getElementById('dashboard').innerHTML = '<div class="devices-error">Failed to load Bpods!</div>');
+        }
+
         loadDevices();
         setInterval(loadDevices, 5000);
     </script>

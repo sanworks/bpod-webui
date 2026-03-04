@@ -91,6 +91,7 @@ body{
     border-left: 8px solid #222222;
     position: relative;
 }
+.device-card.pending { border-left-color: #ff1493; }
 .device-card.online { border-left-color: #28a745; }
 .device-card.offline { border-left-color: #dc3545; }
 .device-card.running { border-left-color: #3484f0; }
@@ -123,6 +124,11 @@ body{
     background: #cce5ff;
     color: #004085;
     animation: pulse-animation 3s infinite;
+}
+.status-scanning{
+    background: #c8c8f0;
+    color: #2a2a3e;
+    animation: pulse-animation 1s infinite;
 }
 @keyframes pulse-animation {
     0% {

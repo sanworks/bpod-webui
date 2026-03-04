@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="dashboard" id="dashboard">
+        <div class="status-scanning" style="padding:1rem; font-size:2rem">Looking for Bpods&hellip;</div>
+    </div>
+    <script>
+        function renderDevice(device) {
+            return `
+                <div class="device-card pending">
+                    <div class="device-header">
+                        <div class="device-name">${device.serial}<br>${device.name}</div>
+                    </div>
+                    <div class="device-info">
+                        <b>${device.address}</b><br>
+                        Location: ${device.location}<br>
+                        ${device.description}<br>
+                        FW: ${device.firmware} &middot; Core: ${device.core}
+                    </div>
+                </div>
+            `;
+        }
+        function loadDevices(){
+            document.getElementById('spinner').classList.remove('d-none');
+            fetch('{{ url_for(json_route) }}')
+            .then(response => response.ok ? response.json() : Promise.reject(response))
+            .then(function(devices){
+                document.getElementById('dashboard').innerHTML = devices.map(renderDevice).join('');
+                document.getElementById('spinner').classList.add('d-none');
+            })
+            .catch(error => document.getElementById('dashboard').innerHTML = '<div class="devices-error">Failed to load Bpods!</div>');
+        }
+        loadDevices();
+        setInterval(loadDevices, 10000);
+    </script>
+{% endblock %}
