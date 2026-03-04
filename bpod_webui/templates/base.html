@@ -18,6 +18,7 @@
         <div class="navbar-nav">
             <a href="{{ url_for('dashboard') }}" class="nav-btn {% if current == 'dashboard' %}active{% endif %}">Devices</a>
             <a href="{{ url_for('configure') }}" class="nav-btn {% if current == 'configure' %}active{% endif %}">Configure</a>
+            <div id="spinner" class="spinner d-none"></div>
             <a href="{{ url_for('help') }}" class="nav-btn {% if current == 'help' %}active{% endif %}">Help</a>
         </div>
     </nav>
