@@ -4,11 +4,23 @@
         <div class="status-scanning" style="padding:1rem; font-size:2rem">Looking for Bpods&hellip;</div>
     </div>
     <script>
+        function blinkBpod(deviceAddress){
+            fetch('{{ url_for("blink_bpod_light") }}', {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                address: deviceAddress
+              })
+            });
+        }
         function renderDevice(device) {
             return `
                 <div class="device-card pending">
                     <div class="device-header">
                         <div class="device-name">${device.serial}<br>${device.name}</div>
+                        <div class="status-badge" style="cursor:pointer" onclick="blinkBpod('${device.address}')">blink light</div>
                     </div>
                     <div class="device-info">
                         <b>${device.address}</b><br>

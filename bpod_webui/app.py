@@ -1,6 +1,10 @@
-from flask import Flask, render_template
+import ipaddress
+import time
+
+from flask import Flask, render_template, request
 from flask.json import jsonify
 
+from bpod_core.bpod import RemoteBpod
 from bpod_webui.util import get_example_devices, get_network_devices, get_settings_path
 
 
@@ -29,6 +33,38 @@ def devices_browse():
 @app.route("/browse/devices.json")
 def network_devices():
     return jsonify(get_network_devices())
+
+
+@app.route("/blink/", methods=["POST"])
+def blink_bpod_light():
+    # Get and validate address
+    data = request.get_json()
+    address = data.get("address", "").strip()
+    if not address:
+        return {"error": "No address provided. Specify an 'address' in your json like tcp://10.42.37.54:62710"}, 400
+    try:
+        prefix, rest = address.split("://")
+        ip, port = rest.split(":")
+        if prefix != "tcp":
+            jsonify({"error": "Invalid protocol. Address must use tcp."}), 400
+        ipaddress.ip_address(ip)
+        try:
+            port = int(port)
+        except ValueError:
+            jsonify({"error": "Invalid port. Port number is not an integer."}), 400
+        if not (1 <= port <= 65535):
+            jsonify({"error": "Invalid port. Port number out of range."}), 400
+    except Exception:
+        return jsonify({"error": "Invalid address format. Specify an 'address' in your json like tcp://10.42.37.54:62710"}), 400
+
+    # Connect to the Bpod and blink its light a few times
+    bpod = RemoteBpod(address=address)
+    for _r in range(3):
+        bpod._remote_call('set_status_led', False)
+        time.sleep(0.3)
+        bpod._remote_call('set_status_led', True)
+        time.sleep(0.3)
+    return jsonify({"status": "ok"})
 
 
 @app.route("/settings/")
