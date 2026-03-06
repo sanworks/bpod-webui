@@ -5,7 +5,7 @@ description = "A Python web UI to monitor the status of Bpod rigs on the local n
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "bpod-core==0.1.0a7",
+    "bpod-core==0.1.0a8",
     "flask>=3.1.2",
     "platformdirs>=4.9.2",
 ]
